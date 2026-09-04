@@ -2969,4 +2969,100 @@ body.lightbox-open{overflow:hidden}
   });
 
 })();
+</script>
+<script>
+(function(){
+
+  const day5Fix = {
+    kk: {
+      'После завтрака Вы не спеша собираетесь и отправляетесь к следующей локации.':
+        'Таңғы астан кейін асықпай жиналып, келесі орынға аттанасыз.',
+      'Это место совсем не похоже на привычный Таиланд.':
+        'Бұл орын үйреншікті Тайландқа мүлдем ұқсамайды.',
+      'Просторная зелёная территория, горы на горизонте, слоны в естественной среде и дикие животные создают атмосферу африканского сафари.':
+        'Кең жасыл аумақ, көкжиектегі таулар, табиғи ортадағы пілдер мен жабайы жануарлар африкалық сафари атмосферасын қалыптастырады.'
+    },
+
+    hy: {
+      'После завтрака Вы не спеша собираетесь и отправляетесь к следующей локации.':
+        'Նախաճաշից հետո դուք հանգիստ հավաքվում և ուղևորվում եք հաջորդ վայր։',
+      'Это место совсем не похоже на привычный Таиланд.':
+        'Այս վայրը բոլորովին նման չէ սովորական Թաիլանդին։',
+      'Просторная зелёная территория, горы на горизонте, слоны в естественной среде и дикие животные создают атмосферу африканского сафари.':
+        'Ընդարձակ կանաչ տարածքը, հորիզոնի լեռները, բնական միջավայրում գտնվող փղերն ու վայրի կենդանիները ստեղծում են աֆրիկյան սաֆարիի մթնոլորտ։'
+    },
+
+    ka: {
+      'После завтрака Вы не спеша собираетесь и отправляетесь к следующей локации.':
+        'საუზმის შემდეგ მშვიდად მოემზადებით და შემდეგ ლოკაციაზე გაემგზავრებით.',
+      'Это место совсем не похоже на привычный Таиланд.':
+        'ეს ადგილი საერთოდ არ ჰგავს ჩვეულებრივ ტაილანდს.',
+      'Просторная зелёная территория, горы на горизонте, слоны в естественной среде и дикие животные создают атмосферу африканского сафари.':
+        'ფართო მწვანე ტერიტორია, ჰორიზონტზე მთები, ბუნებრივ გარემოში მყოფი სპილოები და გარეული ცხოველები აფრიკული საფარის ატმოსფეროს ქმნის.'
+    }
+  };
+
+  function translateDay5(lang){
+
+    if(lang === 'ru') return;
+
+    const walker = document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT
+    );
+
+    const nodes = [];
+    let node;
+
+    while(node = walker.nextNode()){
+
+      if(!node.nodeValue.trim()) continue;
+
+      if(
+        node.parentElement &&
+        (
+          node.parentElement.closest('script') ||
+          node.parentElement.closest('style') ||
+          node.parentElement.closest('#language-button') ||
+          node.parentElement.closest('#language-menu')
+        )
+      ) continue;
+
+      nodes.push(node);
+    }
+
+    nodes.forEach(function(node){
+
+      let text = node.nodeValue;
+
+      Object.keys(day5Fix[lang] || {}).forEach(function(original){
+
+        if(text.includes(original)){
+          text = text.replace(
+            original,
+            day5Fix[lang][original]
+          );
+        }
+
+      });
+
+      node.nodeValue = text;
+    });
+  }
+
+  document.querySelectorAll('.language-option').forEach(function(option){
+
+    option.addEventListener('click', function(){
+
+      const lang = this.dataset.lang;
+
+      setTimeout(function(){
+        translateDay5(lang);
+      }, 100);
+
+    });
+
+  });
+
+})();
 </script></body></html>
